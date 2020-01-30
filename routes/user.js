@@ -1,13 +1,15 @@
 const jwt = require('jsonwebtoken');
 const fetch = require('node-fetch');
+const crypto = require('crypto');
 
 exports.signin = (req, res) => {
     const { email, password } = req.body;
-    console.debug(email, "debug in signin");
-    console.debug(password, "debug in signin");
 
+    if(!email || !password) {
+        return res.status(400).json({msg: "Missing email or password"});
+    }
     fetch('http://localhost:3000/ReadByEmailAndPassword', {
-        method: 'GET',
+        method: 'POST',
         body: JSON.stringify({
             email,
             password
@@ -18,23 +20,14 @@ exports.signin = (req, res) => {
         .then(result => {
             if (!result.id) {
                 return res.status(400).json({
-                    error: 'User with that email does not exist. Please signup'
+                    error: 'User with that email does not exist, please signup.'
                 });
             }
-            // const token = jwt.sign(
-            //     { _id: user._id },
-            //     'armadilo12',
-            //     //TODO:
-            //     // {
-            //     //     // expiresIn: "12h",
-            //     //     algorithm: "RS256"
-            //     // }
-            // );
-            const token = jwt.sign(result.id, process.env.SECRET_KEY);
 
-            return res.json(token);
+            const token = jwt.sign({ _id: result.id }, process.env.SECRET_KEY);
+            return res.json({ token });
         })
-        .catch(err => res.status(400).json({ err }))
+        .catch(err => res.status(400).json({ msg: "An error has occurred while trying to sign-in." }))
 
 };
 
