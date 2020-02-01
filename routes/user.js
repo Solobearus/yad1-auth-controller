@@ -3,11 +3,9 @@ const fetch = require('node-fetch');
 
 exports.signin = (req, res) => {
     const { email, password } = req.body;
-    console.debug(email, "debug in signin");
-    console.debug(password, "debug in signin");
 
-    fetch('http://localhost:3000/ReadByEmailAndPassword', {
-        method: 'GET',
+    fetch('http://localhost:3002/ReadByEmailAndPassword', {
+        method: 'POST',
         body: JSON.stringify({
             email,
             password
@@ -40,7 +38,7 @@ exports.signin = (req, res) => {
 
 exports.signup = (req, res) => {
 
-    fetch('http://localhost:3000/', {
+    fetch('http://localhost:3002/', {
         method: 'post',
         body: JSON.stringify(req.body),
         headers: { 'Content-Type': 'application/json' }

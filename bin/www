@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('yad1-auth-controller:server');
 var http = require('http');
+const marker = require('@ajar/marker'); 
 
 /**
  * Get port from environment and store in Express.
@@ -25,6 +26,7 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
+marker.magenta(`♠ Listening on port ${port} ♠`);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
