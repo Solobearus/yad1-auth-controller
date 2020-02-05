@@ -33,7 +33,7 @@ exports.signin = (req, res) => {
 
 exports.signup = (req, res) => {
 
-    fetch('http://localhost:3000/', {
+    fetch('http://localhost:3002/', {
         method: 'post',
         body: JSON.stringify(req.body),
         headers: { 'Content-Type': 'application/json' }
