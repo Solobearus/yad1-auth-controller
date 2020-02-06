@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const fetch = require('node-fetch');
 
-exports.signin = (req, res) => {
+exports.signin = async (req, res) => {
     const { email, password } = req.body;
 
     fetch('http://localhost:3002/ReadByEmailAndPassword', {
@@ -19,18 +19,19 @@ exports.signin = (req, res) => {
                     error: 'User with that email does not exist. Please signup'
                 });
             }
-            // const token = jwt.sign(
-            //     { _id: user._id },
-            //     'armadilo12',
-            //     //TODO:
-            //     // {
-            //     //     // expiresIn: "12h",
-            //     //     algorithm: "RS256"
-            //     // }
-            // );
-            const token = jwt.sign(result.id, process.env.SECRET_KEY);
+            const token = jwt.sign(
+                {_id: result.id},
+                process.env.SECRET_KEY,
+                {
+                    algorithm: "HS256",
+                    expiresIn: "12h"
+                }
+            );
 
-            return res.json(token);
+            return res.json({
+                 name: result.name,
+                 token 
+            });
         })
         .catch(err => res.status(400).json({ err }))
 
