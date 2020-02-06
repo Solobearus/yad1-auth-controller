@@ -33,8 +33,7 @@ exports.signin = async (req, res) => {
                  token 
             });
         })
-        .catch(err => res.status(400).json({ err }))
-
+        .catch(err => res.status(400).json({ err }));
 };
 
 exports.signup = (req, res) => {
