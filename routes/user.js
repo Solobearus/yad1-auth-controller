@@ -1,7 +1,10 @@
 const jwt = require('jsonwebtoken');
 const fetch = require('node-fetch');
+var express = require('express');
 
-exports.signin = async (req, res) => {
+var authRouter = express.Router();
+
+authRouter.post('/signin', function (req, res, next) {
     const { email, password } = req.body;
 
     fetch('http://localhost:3002/ReadByEmailAndPassword', {
@@ -20,7 +23,7 @@ exports.signin = async (req, res) => {
                 });
             }
             const token = jwt.sign(
-                {_id: result.id},
+                { _id: result.id },
                 process.env.SECRET_KEY,
                 {
                     algorithm: "HS256",
@@ -29,14 +32,14 @@ exports.signin = async (req, res) => {
             );
 
             return res.json({
-                 name: result.name,
-                 token 
+                name: result.name,
+                token
             });
         })
         .catch(err => res.status(400).json({ err }));
-};
+})
 
-exports.signup = (req, res) => {
+authRouter.post('/signup', function (req, res, next) {
 
     fetch('http://localhost:3002/', {
         method: 'post',
@@ -50,4 +53,27 @@ exports.signup = (req, res) => {
             }
             res.status(201).json(result);
         })
-}
+})
+
+
+authRouter.post('/verify', function (req, res, next) {
+
+    jwt.verify(
+        req.body.token,
+        process.env.SECRET_KEY,
+        {
+            algorithm: ["HS256"],
+        },
+        (err, decoded) => {
+            // console.log("wtf is going on here:");
+            // console.log("err:",err);
+            // console.log("decoded:",decoded);
+            
+            if (err) {
+                return res.status(400).json({ err: 'the provided token is invalid' });
+            }
+            return res.status(201).json(decoded);
+        })
+})
+
+module.exports = authRouter;
