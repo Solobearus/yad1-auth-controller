@@ -7,4 +7,4 @@ This is the Auth microservice. It handles all authentication and authorization f
 All logins are authenticated in this microservice, and all calls to the resources in the application are autherized here.
 
 #### For all related information about the project visit here
-- [Frontend and main Landing page](https://github.com/Solobearus/6stackles-gateway-api "API Gateway")
+- [Frontend and main Landing page](https://github.com/Solobearus/6stackles-front "Frontend and main Landing page")
