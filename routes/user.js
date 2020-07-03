@@ -7,7 +7,7 @@ var authRouter = express.Router();
 authRouter.post('/signin', function (req, res, next) {
     const { email, password } = req.body;
 
-    fetch('http://localhost:3002/ReadByEmailAndPassword', {
+    fetch(`${process.env.ADRESS_OF_USERS}/ReadByEmailAndPassword`, {
         method: 'POST',
         body: JSON.stringify({
             email,
@@ -27,7 +27,7 @@ authRouter.post('/signin', function (req, res, next) {
                 process.env.SECRET_KEY,
                 {
                     algorithm: "HS256",
-                    expiresIn: "12h"
+                    expiresIn: "1h"
                 }
             );
 
@@ -41,7 +41,7 @@ authRouter.post('/signin', function (req, res, next) {
 
 authRouter.post('/signup', function (req, res, next) {
 
-    fetch('http://localhost:3002/', {
+    fetch(`${process.env.ADRESS_OF_USERS}/`, {
         method: 'post',
         body: JSON.stringify(req.body),
         headers: { 'Content-Type': 'application/json' }
@@ -65,12 +65,8 @@ authRouter.post('/verify', function (req, res, next) {
             algorithm: ["HS256"],
         },
         (err, decoded) => {
-            // console.log("wtf is going on here:");
-            // console.log("err:",err);
-            // console.log("decoded:",decoded);
-            
             if (err) {
-                return res.status(400).json({ err: 'the provided token is invalid' });
+                return res.status(400).json({ err: 'The provided token is invalid.' });
             }
             return res.status(201).json(decoded);
         })
